@@ -1,6 +1,6 @@
 # Wultra JResult
 
-<p align="center"><img src="intro.jpg" alt="Wultra Digital Onboarding for Android" width="100%" /></p>
+<p align="center"><img src="intro.jpg" alt="Wultra JResult" width="100%" /></p>
 
 ![build](https://github.com/wultra/JResult/actions/workflows/build.yml/badge.svg)
 [![jcenter](https://img.shields.io/maven-central/v/com.wultra.android.utilities/jresult)](https://mvnrepository.com/artifact/com.wultra.android.mtokensdk/wultra-mtoken-sdk)

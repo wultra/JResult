@@ -1,5 +1,7 @@
 # Wultra JResult
 
+<p align="center"><img src="intro.jpg" alt="Wultra Digital Onboarding for Android" width="100%" /></p>
+
 A Java-enabled wrapper for the kotlin.Result class which is unable to bridge into the Java.
 
 ## Integration

@@ -2,6 +2,11 @@
 
 <p align="center"><img src="intro.jpg" alt="Wultra Digital Onboarding for Android" width="100%" /></p>
 
+[![build](https://github.com/wultra/JResult/actions/workflows/build.yml/badge.svg)]
+[![jcenter](https://img.shields.io/maven-central/v/com.wultra.android.utilities/jresult)](https://mvnrepository.com/artifact/com.wultra.android.mtokensdk/wultra-mtoken-sdk)
+![date](https://img.shields.io/github/release-date/wultra/jresult)
+[![license](https://img.shields.io/github/license/wultra/jresult)](LICENSE)
+
 A Java-enabled wrapper for the kotlin.Result class which is unable to bridge into the Java.
 
 ## Integration

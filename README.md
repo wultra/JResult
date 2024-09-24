@@ -85,8 +85,10 @@ When processing kotlin.Result<T> in Java, you might find yourself baffled with `
 This class unboxes the underlying object for you to make things easier in Java.
 
 > [!NOTE]  
-> kotlin.Result is a value class made for better performance. This wrapper was made to create a simple bridge option between Kotlin and Java with no regard for performance.
+> `kotlin.Result` is a value class made for better performance. This wrapper was made to create a simple bridge option between Kotlin and Java with no regard for performance.
+> 
 > The impact on the performance of this wrapper will be absolutely insignificant in most cases, but consider yourself warned :)
+> 
 > This project was made for our internal purposes and will be maintained as such.
 
 ## License

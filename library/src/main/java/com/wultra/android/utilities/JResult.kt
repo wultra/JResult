@@ -34,7 +34,8 @@ package com.wultra.android.utilities
  * });
  * ```
  */
-class JResult<T>(val result: Result<T>) {
+@Suppress("UNCHECKED_CAST", "MemberVisibilityCanBePrivate")
+class JResult<T>(result: Result<T>) {
 
     companion object {
         /**
@@ -48,53 +49,49 @@ class JResult<T>(val result: Result<T>) {
         fun <T>wrap(result: Result<T>): JResult<T> = JResult(result)
     }
 
+    private val unboxed = result.unbox()
+
     /** Returns true if this instance represents a successful outcome. In this case isFailure returns false. */
-    val isSuccess = result.isSuccess
+    val isSuccess = unboxed != null && unboxed !is Throwable
 
     /** Returns true if this instance represents a failed outcome. In this case isSuccess returns false. */
-    val isFailure = result.isFailure
+    val isFailure = unboxed == null || unboxed is Throwable
 
     /** Returns the encapsulated value if this instance represents success or null if it is failure. */
-    fun getOrNull(): T? = result.takeOrNull()
+    fun getOrNull(): T? = if (isSuccess) unboxed as? T else null
 
-    /** Returns the encapsulated value if this instance represents success or throws the encapsulated Throwable exception if it is failure. */
-    fun getOrThrow(): T? = result.takeOrNull() ?: throw result.expOrNull()!!
+    /** Returns the value if this instance represents success or throws an exception if it is failure. */
+    fun getOrThrow(): T = if (isFailure) throw exceptionOrNull()!! else unboxed as T
 
     /** Returns the encapsulated Throwable exception if this instance represents failure or null if it is success. */
-    fun exceptionOrNull(): java.lang.Exception? = result.expOrNull()
+    fun exceptionOrNull(): Throwable? {
+        return if (isFailure) {
+            unboxed as? Throwable ?: Throwable("Failed to unbox the value")
+        } else {
+            null
+        }
+    }
 
-    override fun toString() = "JResult wrapper of $result"
+    override fun toString() = "JResult wrapper of $unboxed"
 
     /** Performs the given action on the encapsulated exception if this instance represents failure. Returns the original Result unchanged. */
-    fun onFailure(action: (exception: java.lang.Exception) -> Void): JResult<T> {
-        result.onFailure {
-            action(result.expOrNull()!!)
-        }
+    fun onFailure(action: (exception: Throwable) -> Void): JResult<T> {
+        exceptionOrNull()?.let { action(it) }
         return this
     }
 
     /** Performs the given action on the encapsulated value if this instance represents success. Returns the original Result unchanged. */
     fun onSuccess(action: (value: T) -> Void): JResult<T> {
-        result.onSuccess {
-            action(result.takeOrNull()!!)
-        }
+        getOrNull()?.let { action(it) }
         return this
     }
 
-
-
-    @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE", "UNCHECKED_CAST")
-    private fun <T> Result<T>.takeOrNull(): T? {
-        return (value as? Result<T>)?.value as? T
-    }
-
-    @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE", "UNCHECKED_CAST")
-    private fun <T> Result<T>.expOrNull(): java.lang.Exception? {
-        val unboxed = (value as? Result<T>)?.value as? Throwable
-        return if (unboxed != null) {
-            java.lang.Exception(unboxed)
-        } else {
-            null
+    @Suppress("INVISIBLE_MEMBER", "INVISIBLE_REFERENCE")
+    private fun <T> Result<T>.unbox(): Any? {
+        var unboxed: Any? = this
+        while (unboxed is Result<*> || unboxed is Result.Failure) {
+            unboxed = (unboxed as? Result<*>)?.value ?: (unboxed as? Result.Failure)?.exception
         }
+        return unboxed
     }
 }

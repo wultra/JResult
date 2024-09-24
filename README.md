@@ -15,7 +15,7 @@ Add dependency to your Gradle project.
 
 ```groovy
 dependencies {
-    implementation("com.wultra.android.utilities:jresult:1.0.0")
+    implementation("com.wultra.android.utilities:jresult:1.0.1")
 }
 ```
 
